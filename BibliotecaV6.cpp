@@ -19,6 +19,10 @@ struct S_Libro {
 	string sTituloLibro;
 	string sAutorLibro;
 	S_Tiempo tFechaPublicacion;
+	string sEditorial;
+	int nNumEstante;
+	string arrEstado;
+	
 };
 
 // Estructura para usuarios
@@ -27,6 +31,7 @@ struct S_Usuario {
 	string sNombre;
 	string sApellido;
 	string sContrasena;
+	int nTelf;
 };
 
 // Estructura para empleados
@@ -35,10 +40,11 @@ struct S_Empleado {
 	string sNombre;
 	string sApellido;
 	string sEmail;
+	int nTelf;
 };
 
 // Función para llenar datos de libros
-void llenar(int nCad, S_Libro vt[], string arrTitulos[], string arrAutores[]) {
+void llenar(int nCad, S_Libro vt[], string arrTitulos[], string arrAutores[],int nNumEstante, string arrEditorial[],string arrEstado[]) {
 	for (int i = 0; i < nCad; i++) {
 		vt[i].nSNBI = 1 + i;
 		vt[i].sTituloLibro = arrTitulos[rand() % 5];
@@ -46,7 +52,9 @@ void llenar(int nCad, S_Libro vt[], string arrTitulos[], string arrAutores[]) {
 		vt[i].tFechaPublicacion.nDia = 1 + rand() % 31;
 		vt[i].tFechaPublicacion.nMes = 1 + rand() % 12;
 		vt[i].tFechaPublicacion.nAnio = 1980 + rand() % 41;
-	}
+		vt[i].nNumEstante = 1 + rand() % 20;
+		vt[i].sEditorial = arrEditorial[i];
+		vt[i].arrEstado = arrEstado[rand() % 3];	}
 }
 
 // Función para imprimir detalles de libros
@@ -58,6 +66,9 @@ void imprimir(const S_Libro vt[], int nCad, int nIndex) {
 		cout << "Fecha de publicacion: " << vt[nIndex].tFechaPublicacion.nDia << "/"
 			<< vt[nIndex].tFechaPublicacion.nMes << "/"
 			<< vt[nIndex].tFechaPublicacion.nAnio << endl;
+		cout << "Numero de Estante: " << vt[nIndex].nNumEstante  << endl;
+		cout << "Editorial: " << vt[nIndex].sEditorial << endl;
+		cout << "Condicion del libro: "<< vt[nIndex].arrEstado <<endl;
 		cout << endl;
 		
 		imprimir(vt, nCad, nIndex + 1); // Llamada recursiva para el siguiente libro
@@ -65,48 +76,52 @@ void imprimir(const S_Libro vt[], int nCad, int nIndex) {
 }
 
 // Función para llenar datos de usuarios
-void llenar(int nCad, S_Usuario usuarios[], string arrNombres[], string arrApellidos[]) {
+void llenar(int nCad, S_Usuario usuarios[], string arrNombres[], string arrApellidos[],int nTelf) {
 	for (int i = 0; i < nCad; i++) {
 		usuarios[i].nIDUsuario = 201 + i;
 		usuarios[i].sNombre = arrNombres[rand() % 10];
 		usuarios[i].sApellido = arrApellidos[rand() % 10];
 		usuarios[i].sContrasena = usuarios[i].sNombre + usuarios[i].sApellido; // Concatenación de nombre y apellido
+		usuarios[i].nTelf =70000000+rand()%79999999;
 	}
 }
 
 // Función para imprimir detalles de usuarios
-void imprimir(const S_Usuario usuarios[], int nCad, int nIndex) {
+void imprimir(const S_Usuario usuarios[], int nCad, int nIndex,int nTelf) {
 	if (nIndex < nCad) {
 		cout << "ID Usuario:  " << usuarios[nIndex].nIDUsuario << endl;
 		cout << "Nombre: " << usuarios[nIndex].sNombre << endl;
 		cout << "Apellido: " << usuarios[nIndex].sApellido << endl;
 		cout << "Contraseña: " << usuarios[nIndex].sContrasena << endl;
+		cout << "Telefono: " << usuarios[nIndex].nTelf << endl;
 		cout << endl;
 		
-		imprimir(usuarios, nCad, nIndex + 1); // Llamada recursiva para el siguiente usuario
+		imprimir(usuarios, nCad, nIndex + 1,nTelf); // Llamada recursiva para el siguiente usuario
 	}
 }
 
 // Función para llenar datos de empleados
-void llenar(int nCad, S_Empleado empleados[], string arrNombres[], string arrApellidos[]) {
+void llenar(int nCad, S_Empleado empleados[], string arrNombres[], string arrApellidos[],int nTelf) {
 	for (int i = 0; i < nCad; i++) {
 		empleados[i].nIDEmpleado = 101 + i;
-		empleados[i].sNombre = arrNombres[rand() % nCad];
-		empleados[i].sApellido = arrApellidos[rand() % nCad];
+		empleados[i].sNombre = arrNombres[rand() % 10];
+		empleados[i].sApellido = arrApellidos[rand() % 10];
 		empleados[i].sEmail = empleados[i].sNombre + empleados[i].sApellido + "@gmail.com"; // Concatenación de nombre y apellido
+		empleados[i].nTelf =70000000+rand()%79999999;
 	}
 }
 
 // Función para imprimir detalles de empleados
-void imprimir(const S_Empleado empleados[], int nCad, int nIndex) {
+void imprimir(const S_Empleado empleados[], int nCad, int nIndex,int nTelf) {
 	if (nIndex < nCad) {
 		cout << "ID Empleado:  " << empleados[nIndex].nIDEmpleado << endl;
 		cout << "Nombre: " << empleados[nIndex].sNombre << endl;
 		cout << "Apellido: " << empleados[nIndex].sApellido << endl;
 		cout << "Email: " << empleados[nIndex].sEmail << endl;
+		cout << "Telefono: " << empleados[nIndex].nTelf << endl;
 		cout << endl;
 		
-		imprimir(empleados, nCad, nIndex + 1); // Llamada recursiva para el siguiente empleado
+		imprimir(empleados, nCad, nIndex + 1,nTelf); // Llamada recursiva para el siguiente empleado
 	}
 }
 
@@ -204,11 +219,15 @@ int main() {
 	S_Usuario usuarios[CAD];
 	S_Empleado empleados[CAD];
 	srand(time(NULL));
+	int nTelf;
+	int nNumEstante;
 	
 	string arrTitulos[] = { "Aprenda C", "Calculo 1", "Problemas y Soluciones", "Tecnología Moderna", "Los Animales" };
 	string arrAutores[] = { "Erich Segal", "William P. Blatty", "Richard Bach", "Erica Jong", "Gabriel Garciía Márquez" };
 	string arrNombres[] = { "Juan", "Pedro", "Roberto", "Silvia", "Karen", "Rafaela", "Sofia", "Alicia", "Jaime", "Iver" };
 	string arrApellidos[] = { "Peralta", "Lazarte", "Cuba", "Torre", "Saucedo", "Ruiz", "Flores", "Herrera", "Fernandez", "Aguilera" };
+	string arrEditorial[] = { "Comunity", "Santa Cruz", "La Hogera" , "Editorial C", "AyR" };
+	string arrEstado[] = { "Bueno", "Aceptable", "Malo"};
 	
 	do {
 		cout << "\nMENU" << endl;
@@ -223,9 +242,9 @@ int main() {
 		cout << "--------------------" << endl;
 		switch (opcion) {
 		case 1:
-			llenar(CAD, vt, arrTitulos, arrAutores);
-			llenar(CAD, usuarios, arrNombres, arrApellidos);
-			llenar(CAD, empleados, arrNombres, arrApellidos);
+			llenar(CAD, vt, arrTitulos, arrAutores, nNumEstante, arrEditorial,arrEstado);
+			llenar(CAD, usuarios, arrNombres, arrApellidos, nTelf);
+			llenar(CAD, empleados, arrNombres, arrApellidos, nTelf);
 			cout << "Datos llenados" << endl;
 			break;
 		case 2:
@@ -244,10 +263,10 @@ int main() {
 					imprimir(vt, CAD, 0);
 					break;
 				case 2:
-					imprimir(usuarios, CAD, 0);
+					imprimir(usuarios, CAD, 0,nTelf);
 					break;
 				case 3:
-					imprimir(empleados, CAD, 0);
+					imprimir(empleados, CAD, 0,nTelf);
 					break;
 				case 4:
 					break; // Regresar al Menú Principal
